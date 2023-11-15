@@ -1,10 +1,14 @@
-let number = 0;
-let backgroundImage;
+let currentImageIndex = 0;
+let images = [
+  'https://media.discordapp.net/attachments/1059984634114490499/1174286355652677662/blueskin.png?ex=65670a64&is=65549564&hm=60724730d7d4ceaa98c492773d5365ceb425f78580526a7531b5083899b25117&=&width=691&height=489',
+  'https://media.discordapp.net/attachments/1059984634114490499/1174289097087537152/pinched_skin.png?ex=65670cf1&is=655497f1&hm=5a4fbc321ffcaf1dbfd44e66c4681916488ef849baf54efb838837166b839eab&=&width=691&height=489',
+];
 
 function preload() {
-  // Load a random image from the internet
-  let imageUrl = 'https://cdn.discordapp.com/attachments/787035171361914901/1174274480663711774/scale_pdf.png?ex=6566ff55&is=65548a55&hm=3cb0667aaabf2a87cb00e6510b53b41450242f23c6386acf3333bf31577d619d&'; // Replace with your desired image URL
-  backgroundImage = loadImage(imageUrl);
+  // Load initial image
+  loadImage(images[currentImageIndex], img => {
+    currentImage = img;
+  });
 }
 
 function setup() {
@@ -12,27 +16,21 @@ function setup() {
 }
 
 function draw() {
-  // Set the background to the loaded image
-  background(backgroundImage);
+  background(220);
 
-  textAlign(CENTER, CENTER);
-  textSize(32);
-
-  // Check if the mouse is pressed
-  if (mouseIsPressed) {
-    // Increase the number up to 160
-    if (number < 160) {
-      number += 1;
-    }
+  // Display the current image
+  if (currentImage) {
+    image(currentImage, 0, 0, width, height);
   }
 
-  // Display the number
-  fill(0);
-  text(number, 430, 100);
 
-  // Apply the blur effect when the counter reaches 135
-  if (number >= 135 && number < 160) {
-    let blurAmount = map(number, 135, 160, 0, 10); // Map the blur amount based on the counter
-    filter(BLUR, blurAmount);
-  }
 }
+
+function mousePressed() {
+  // Switch to the next image when clicked
+  currentImageIndex = (currentImageIndex + 1) % images.length;
+  loadImage(images[currentImageIndex], img => {
+    currentImage = img;
+  });
+}
+///
